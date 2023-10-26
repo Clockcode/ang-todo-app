@@ -1,4 +1,15 @@
 <header class="header">
   <h1>todos</h1>
-  <input class="new-todo" placeholder="What needs to be done?" autofocus />
+  <!-- 
+    (keyup) event to store input each time a key is fired.
+    (keyup.enter) is a pseudo-event to store input when pressed on enter 
+  -->
+  <input
+    class="new-todo"
+    placeholder="What needs to be done?"
+    autofocus
+    [value]="text"
+    (keyup)="changeText($event)"
+    (keyup.enter)="addTodo()"
+  />
 </header>

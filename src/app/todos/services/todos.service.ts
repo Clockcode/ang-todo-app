@@ -8,7 +8,7 @@ export class TodosService {
   // This subject is ideal when you want to maintain and provide a "current value" to subscribers.
   // When a new observer subscribes to a BehaviorSubject, it immediately receives the current value (or the last value that was emitted).
   todos$ = new BehaviorSubject<TodoInterface[]>([]);
-
+  filter$ = new BehaviorSubject<FilterEnum>(FilterEnum.all);
   addTodo(text: string): void {
     const newTodo: TodoInterface = {
       text,

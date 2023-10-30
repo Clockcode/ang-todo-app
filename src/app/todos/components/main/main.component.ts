@@ -10,7 +10,18 @@ import { FilterEnum } from '../../types/filter.enum';
 })
 export class MainTodos {
   visibleTodos$: Observable<TodoInterface[]>;
+  noTodoClass$: Observable<boolean>;
+  isAllTodosSelected$: Observable<boolean>;
   constructor(private todosService: TodosService) {
+    // Checks and returns true if every todo is completed
+    this.isAllTodosSelected$ = this.todosService.todos$.pipe(
+      map((todos) => todos.every((todo) => todo.isCompleted))
+    );
+    // Checks and returns true if no todo is added
+    this.noTodoClass$ = this.todosService.todos$.pipe(
+      map((todos) => todos.length === 0)
+    );
+    // Returns todos that are filtered by active or compeleted
     this.visibleTodos$ = combineLatest([
       this.todosService.todos$,
       this.todosService.filter$,
@@ -25,5 +36,10 @@ export class MainTodos {
         }
       })
     );
+  }
+
+  toggleAllTodos(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.todosService.toggleAll(target.checked);
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { TodoInterface } from '../types/todo.interface';
 import { FilterEnum } from '../types/filter.enum';
 
@@ -30,5 +30,9 @@ export class TodosService {
     });
     // next method pushes updatedTodos as the new value of todos$
     this.todos$.next(updatedTodos);
+  }
+
+  changeFilter(filterName: FilterEnum): void {
+    this.filter$.next(filterName);
   }
 }

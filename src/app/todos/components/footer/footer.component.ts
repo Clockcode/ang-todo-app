@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TodosService } from '../../services/todos.service';
-import { Observable, map } from 'rxjs';
+import { Observable, filter, map } from 'rxjs';
+import { FilterEnum } from 'src/app/todos/types/filter.enum';
 
 @Component({
   selector: 'app-todos-footer',
@@ -9,11 +10,18 @@ import { Observable, map } from 'rxjs';
 export class FooterComponent {
   // Hides or displays the footer
   noTodoClass$: Observable<boolean>;
+
   // Stores the number of active todos
   activeCount$!: Observable<number>;
+
   // Stores string for todo text
   itemsLeftText$!: Observable<string>;
-  // displays a filter
+
+  // Stores filters that are imported into the component
+  filterEnum = FilterEnum;
+
+  // Stores filter value
+  filter$!: Observable<FilterEnum>;
   constructor(private todosService: TodosService) {
     // Returns the number of active todos
     this.activeCount$! = todosService.todos$.pipe(
@@ -29,5 +37,11 @@ export class FooterComponent {
     this.itemsLeftText$ = this.activeCount$.pipe(
       map((activeCount$) => `item${activeCount$ <= 1 ? '' : 's'} left`)
     );
+
+    this.filter$ = this.todosService.filter$;
+  }
+  changeFilter(event: Event, filterName: FilterEnum): void {
+    event.preventDefault();
+    this.todosService.changeFilter(filterName);
   }
 }

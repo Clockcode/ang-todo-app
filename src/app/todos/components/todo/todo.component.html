@@ -13,6 +13,7 @@
     <input
       class="edit"
       [value]="editingText"
+      #textEdit
       (keyup)="changeText($event)"
       (keyup.enter)="changeTodo()"
     />

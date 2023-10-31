@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { TodoInterface } from '../types/todo.interface';
 import { FilterEnum } from '../types/filter.enum';
 
@@ -34,5 +34,36 @@ export class TodosService {
 
   changeFilter(filterName: FilterEnum): void {
     this.filter$.next(filterName);
+  }
+  changeTodo(id: string, text: string): void {
+    console.log('id', id);
+    const updatedTodos = this.todos$.getValue().map((todo) => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          text,
+        };
+      }
+      return todo;
+    });
+    // next method pushes updatedTodos as the new value of todos$
+    this.todos$.next(updatedTodos);
+  }
+  removeTodo(id: string): void {
+    const updatedTodos = this.todos$
+      .getValue()
+      .filter((todo) => todo.id !== id);
+    this.todos$.next(updatedTodos);
+  }
+  toggleTodo(id: string): void {
+    // find todo
+    // if active make completed
+    // if completed make active
+    const updatedTodos = this.todos$.getValue().map((todo) => {
+      if (todo.id === id) return { ...todo, isCompleted: !todo.isCompleted };
+      else return todo;
+    });
+    this.todos$.next(updatedTodos);
+    // push updated todos
   }
 }
